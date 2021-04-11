@@ -9,12 +9,11 @@
 #
 # Provides command line interface via ticdat.standard_main
 # For example, typing
-#   python netflow.py -i netflow_sample_data -o netflow_solution
+#   python -m tts_netflow -i netflow_sample_data -o netflow_solution
 # will read from the model stored in the netflow_sample_data directory
 # and write the solution to a netflow_solution directory.  These data directories contain .csv files.
 #
-# This version of the netflow example takes extra precautions to avoid generating
-# unneeded constraints. See the simplest_examples directory for a simpler version of this model.
+# This is a Tidy, Tested, Safe package version of the single file example here. https://bit.ly/3dR1CIp
 
 try: # if you don't have gurobipy installed, the code will still load and then fail on solve
     import gurobipy as gu
@@ -32,13 +31,8 @@ input_schema = TicDatFactory (
 )
 
 # Define the foreign key relationships
-input_schema.add_foreign_key("arcs", "nodes", ['Source', 'Name'])
-input_schema.add_foreign_key("arcs", "nodes", ['Destination', 'Name'])
-input_schema.add_foreign_key("cost", "nodes", ['Source', 'Name'])
-input_schema.add_foreign_key("cost", "nodes", ['Destination', 'Name'])
-input_schema.add_foreign_key("cost", "commodities", ['Commodity', 'Name'])
-input_schema.add_foreign_key("inflow", "commodities", ['Commodity', 'Name'])
-input_schema.add_foreign_key("inflow", "nodes", ['Node', 'Name'])
+# LEAVING THIS CODE OFF DELIBERATELY IN VERSION 0.0.1 OF THE CODE SO THAT WE CAN
+# DEMO THE PACKAGE IMPROVING FROM ONE RELEASE TO THE NEXT
 
 # Define the data types
 input_schema.set_data_type("commodities", "Volume", min=0, max=float("inf"),
@@ -109,10 +103,4 @@ def solve(dat):
         rtn.parameters["Total Cost"] = sum(dat.cost[h, i, j]["Cost"] * r["Quantity"]
                                            for (h, i, j), r in rtn.flow.items())
         return rtn
-# ---------------------------------------------------------------------------------
-
-# ------------------------ provide stand-alone functionality ----------------------
-# when run from the command line, will read/write json/xls/csv/db/sql/mdb files
-if __name__ == "__main__":
-    standard_main(input_schema, solution_schema, solve)
 # ---------------------------------------------------------------------------------
