@@ -31,8 +31,13 @@ input_schema = TicDatFactory (
 )
 
 # Define the foreign key relationships
-# LEAVING THIS CODE OFF DELIBERATELY IN VERSION 0.0.1 OF THE CODE SO THAT WE CAN
-# DEMO THE PACKAGE IMPROVING FROM ONE RELEASE TO THE NEXT
+input_schema.add_foreign_key("arcs", "nodes", ['Source', 'Name'])
+input_schema.add_foreign_key("arcs", "nodes", ['Destination', 'Name'])
+input_schema.add_foreign_key("cost", "nodes", ['Source', 'Name'])
+input_schema.add_foreign_key("cost", "nodes", ['Destination', 'Name'])
+input_schema.add_foreign_key("cost", "commodities", ['Commodity', 'Name'])
+input_schema.add_foreign_key("inflow", "commodities", ['Commodity', 'Name'])
+input_schema.add_foreign_key("inflow", "nodes", ['Node', 'Name'])
 
 # Define the data types
 input_schema.set_data_type("commodities", "Volume", min=0, max=float("inf"),
